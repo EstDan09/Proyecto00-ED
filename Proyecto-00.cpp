@@ -238,7 +238,7 @@ void modificarVentanillasArea() {
             listaAreas->next();
         }
         Area areaToManip = listaAreas->getElement();
-        cout << "\n\n\tUsuario eliminado exitosamente!";
+        cout << "\n\n\tArea editada exitosamente!";
     }
     _getch();
     system("cls");

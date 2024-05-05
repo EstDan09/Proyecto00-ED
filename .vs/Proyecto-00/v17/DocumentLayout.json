@@ -33,6 +33,10 @@
           "SelectedChildIndex": 5,
           "Children": [
             {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "Area.h",
@@ -42,12 +46,7 @@
               "RelativeToolTip": "Area.h",
               "ViewState": "AQIAAA8AAAAAAAAAAAAswCgAAAAWAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-05-05T21:00:28.843Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+              "WhenOpened": "2024-05-05T21:00:28.843Z"
             },
             {
               "$type": "Document",
@@ -59,8 +58,7 @@
               "RelativeToolTip": "DNode.h",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAArAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-05-05T21:03:28.406Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-05T21:03:28.406Z"
             },
             {
               "$type": "Document",
@@ -72,8 +70,7 @@
               "RelativeToolTip": "TipoUsuario.h",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-05-05T21:00:58.219Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-05T21:00:58.219Z"
             },
             {
               "$type": "Document",
@@ -85,8 +82,7 @@
               "RelativeToolTip": "DLinkedList.h",
               "ViewState": "AQIAAGQAAAAAAAAAAAAcwHMAAAADAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-05-05T20:57:20.239Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-05T20:57:20.239Z"
             },
             {
               "$type": "Document",
@@ -96,7 +92,7 @@
               "RelativeDocumentMoniker": "Proyecto-00.cpp",
               "ToolTip": "C:\\Users\\eseca\\Desktop\\Code\\C C\u002B\u002B\\C \u002B\u002B\\Estructuras de Datos\\container\\Proyecto-00 ver 4\\Proyecto-00\\Proyecto-00.cpp",
               "RelativeToolTip": "Proyecto-00.cpp",
-              "ViewState": "AQIAAAwAAAAAAAAAAAAswFAAAAAQAAAA",
+              "ViewState": "AQIAANkAAAAAAAAAAAAiwPAAAAAjAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-05-01T14:28:15.86Z",
               "EditorCaption": ""
