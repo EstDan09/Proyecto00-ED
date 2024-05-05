@@ -1,0 +1,5 @@
+﻿  Proyecto-00.cpp
+C:\Users\USER\Downloads\Proyecto-00 ver 3\Proyecto-00\Proyecto-00.cpp(31,21): warning C4838: conversion from 'int' to 'short' requires a narrowing conversion
+C:\Users\USER\Downloads\Proyecto-00 ver 3\Proyecto-00\Proyecto-00.cpp(31,24): warning C4838: conversion from 'int' to 'short' requires a narrowing conversion
+C:\Users\USER\Downloads\Proyecto-00 ver 3\Proyecto-00\Proyecto-00.cpp(93,13): warning C4129: 'A': unrecognized character escape sequence
+  Proyecto-00.vcxproj -> C:\Users\USER\Downloads\Proyecto-00 ver 3\Proyecto-00\x64\Debug\Proyecto-00.exe
