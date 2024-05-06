@@ -44,6 +44,7 @@ public:
 		return ventanillas;
 	}
 	void setCantVentanillas(int cantVentanas) {
+		this->numVentana = 0;
 		ventanillas->clear();
 		this->cantVentanas = cantVentanas;
 		for (int i = 0; i < cantVentanas; i++) {
@@ -51,6 +52,10 @@ public:
 			Ventanilla ventanaNueva(this->codigo, numVentana);
 			ventanillas->append(ventanaNueva);
 		}
+		ventanillas->print();
+	}
+	void setCodigo() {
+		this->codigo = "Z";
 	}
 	friend ostream& operator<<(ostream& os, const Area& area) {
 		os << "Descripción: " << area.descripcion << ", Codigo: " << area.codigo << ", Cant.Ventanillas: " << area.cantVentanas;

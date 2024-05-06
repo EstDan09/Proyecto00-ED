@@ -14,7 +14,7 @@ public: //funciones puramente virtuales que solo tienen implementacion en los su
 	virtual void set(E element) = 0;
 	virtual E remove() = 0;
 	virtual void clear() = 0;
-	virtual E getElement() = 0;
+	virtual E& getElement() = 0;
 	virtual void goToStart() = 0;
 	virtual void goToEnd() = 0;
 	virtual void goToPos(int pos) = 0;

@@ -15,6 +15,10 @@ private:
 	int priorities;
 
 public:
+	HeapPriorityQueue() {
+		pairs = new MinHeap<KVPair<int, E>>(1024);
+		this->priorities = 10;
+	}
 	HeapPriorityQueue(int priorities, int max = DEFAULT_MAX_SIZE) {
 		pairs = new MinHeap<KVPair<int, E>>(max);
 		this->priorities = priorities;

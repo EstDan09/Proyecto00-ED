@@ -7,10 +7,11 @@
 #include "DLinkedList.h"
 #include "PriorityQueue.h"
 
-
+using namespace std;
 class Control {
 private:
-	PriorityQueue<TipoUsuario>* tipos;
+	List<TipoUsuario>* tiposAdmin;
+	PriorityQueue<TipoUsuario>* tiposPublica;
 	List<Servicio>* servicios;
 	List<Area>* areas;
 
@@ -18,56 +19,57 @@ public:
 	Control() {
 		this->areas = new DLinkedList<Area>();
 		this->servicios = new DLinkedList<Servicio>();
-		this->tiposUsuario = new HeapPriorityQueue<TipoUsuario>();
+		this->tiposAdmin = new DLinkedList<TipoUsuario>();
+		this->tiposPublica = new HeapPriorityQueue<TipoUsuario>();
 	}
 	~Control() {
-		delete tiposUsuario;
+		delete tiposAdmin;
+		delete tiposPublica;
 		delete servicios;
 		delete areas;
 	}
 
 	//metodos TipoUsuario//
-	void agregarTipoUsuario(string descripcion, int prioridad) {
-		TipoUsuario t = new TipoUsuario(descripcion, prioridad);
-		tipos->insert(t, prioridad);
+	List<TipoUsuario>* getTiposAdmin() {
+		return tiposAdmin;
+	}
+	PriorityQueue<TipoUsuario>* getTiposPublica() {
+		return tiposPublica;
+	}
+	List<Area>* getAreas() {
+		return areas;
+	}
+	void agregarTipoUsuarioAdmin(string descripcion, int prioridad) {
+		TipoUsuario t = TipoUsuario(descripcion, prioridad);
+		tiposAdmin->insert(t);
+		cout << "dasdasd";
+		tiposAdmin->print();
+	}
+	void agregarTipoUsuarioActivos(string descripcion, int prioridad) {
+		TipoUsuario t =  TipoUsuario(descripcion, prioridad);
+		tiposPublica->insert(t, prioridad);
 	}
 
 	//metodos Area//
 	void agregarArea(string descripcion, string codigo, int cantVentanillas) {
-		Area a = new Area(descripcion, codigo, cantVentanillas);
+		Area a = Area(descripcion, codigo, cantVentanillas);
 		areas->append(a);
+		areas->print();
 	}
 	void modificarCantidadVent(int numArea, int nuevaCantV) {
 		areas->goToPos(numArea - 1);
 		Area a = areas->getElement();
 		a.setCantVentanillas(nuevaCantV);
 	}
-	void eliminarArea(int numArea) {
-		areas->goToPos(numArea - 1);
-		Area a = areas->remove();
-		for (Servicio s; servicios) {
-			if (s.getArea == a) {
-				eliminarServicio2(s);
-			}
-		}
-		delete a;
-	}
+
 
 	//metodos Servicio//
-	void agregarServicio(string descripcion, Area area, int prioridad) {
-		Servicio s = new Servicio(descripcion, prioridad, area);
+	List<Servicio>* getServicios() {
+		return servicios;
+	}
+	void agregarServicio(string descripcion, Area* area, int prioridad) {
+		Servicio s = Servicio(descripcion, prioridad, area);
 		servicios->append(s);
-	}
-	void eliminarServicio2(Servicio s) {
-		if (servicios->contains(s)) {
-			int index = servicios->indexOf(s);
-			eliminarServicio(index);
-		}
-	}
-	void eliminarServicio(int numServicio) {
-		servicios->goToPos(numServicio - 1);
-		Servicio s = servicios->remove();
-		delete s;
 	}
 	void reordenarServicios(int numServicio, int posDestino) {
 		servicios->goToPos(numServicio);
