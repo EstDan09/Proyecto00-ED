@@ -64,7 +64,7 @@ public:
 		tail->previous = head;
 		size = 0;
 	}
-	E getElement() {
+	E& getElement() {
 		if (size == 0)
 			throw runtime_error("List is empty.");
 		if (current->next == tail)

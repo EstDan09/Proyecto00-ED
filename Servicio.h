@@ -13,7 +13,10 @@ private:
 	Area* area;
 
 public:
-	Servicio(string descripcion, int prioridad, Area area) {
+	Servicio() {
+
+	}
+	Servicio(string descripcion, int prioridad, Area* area) {
 		this->area = area;
 		this->descripcion = descripcion;
 		this->prioridad = prioridad;
@@ -24,7 +27,14 @@ public:
 	int getPrioridad() {
 		return this->prioridad;
 	}
-	Area getArea() {
+	Area* getArea() {
 		return this->area;
+	}
+	string getDescripcion() {
+		return this->descripcion;
+	}
+	friend ostream& operator<<(ostream& os, const Servicio& servicio) {
+		os << "Descripción: " << servicio.descripcion << ", Prioridad: " << servicio.prioridad <<", Area: " << servicio.area->getCodigo();
+		return os;
 	}
 };

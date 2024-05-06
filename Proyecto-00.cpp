@@ -4,6 +4,7 @@
 #include "TipoUsuario.h"
 #include "HeapPriorityQueue.h"
 #include "Area.h"
+#include "Control.h"
 #include <vector>
 
 using namespace std;
@@ -41,6 +42,7 @@ int priorityLvlsUsers = 5;
 /*
 * listas de administrador para los tipos disponibles
 */
+Control* controlPrincipal = new Control();
 List<TipoUsuario>* listaTiposUsuario = new DLinkedList<TipoUsuario>();
 
 List<Area>* listaAreas = new DLinkedList<Area>();
@@ -100,17 +102,10 @@ void agregarTipoUsuario() {
     //Falta agregar validacion para descripcion y prioridad ***************
     
     //insetar el tipo de usuario segun la prioridad
-    TipoUsuario nuevoTipoUsuario = TipoUsuario(descripcion, prioridad);
-    if (listaTiposUsuario->getSize() == 0) {
-        listaTiposUsuario->insert(nuevoTipoUsuario);
-    }
-    else {
-        listaTiposUsuario->goToStart();
-        while (!listaTiposUsuario->atEnd() && listaTiposUsuario->getElement().getPrioridad() < prioridad) {
-            listaTiposUsuario->next();
-        }
-        listaTiposUsuario->insert(nuevoTipoUsuario);
-    }
+    //TipoUsuario nuevoTipoUsuario = TipoUsuario(descripcion, prioridad);
+    
+    controlPrincipal->agregarTipoUsuarioAdmin(descripcion, prioridad);
+
     cout << "\n\tUsuario agregado exitosamente!";
     _getch();
     system("cls");
@@ -120,7 +115,7 @@ void eliminarTipoUsuario() {
     bool on = true;
     int opcion;
     const char* titulo = "Eliminar Tipos de Usuario";
-    int n = listaTiposUsuario->getSize(); //obtiene el tamano de la lista de tipos de usuario
+    int n = controlPrincipal->getTiposAdmin()->getSize(); //obtiene el tamano de la lista de tipos de usuario
     system("cls");
 
     //Si no hay usuario por eliminar muestra un mensaje
@@ -130,29 +125,30 @@ void eliminarTipoUsuario() {
     else {
         const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
         int index = 0;
-        listaTiposUsuario->goToStart();
+        controlPrincipal->getTiposAdmin()->goToStart();
 
         //recorre la lista de tipos de usuarios existentes para crear las opciones de eliminar
-        listaTiposUsuario->goToStart();
-        for (int i = 0; i < listaTiposUsuario->getSize(); ++i) {
-            TipoUsuario current = listaTiposUsuario->getElement();
+        controlPrincipal->getTiposAdmin()->goToStart();
+        for (int i = 0; i < controlPrincipal->getTiposAdmin()->getSize(); ++i) {
+            TipoUsuario current = controlPrincipal->getTiposAdmin()->getElement();
             const string::size_type size = current.getDescripcion().size();
             char* descripcion = new char[size + 1];
             memcpy(descripcion, current.getDescripcion().c_str(), size + 1);
             opciones[i]= descripcion;
-            listaTiposUsuario->next();
+            controlPrincipal->getTiposAdmin()->next();
         }
 
         //crea el menu de eliminar tipos de usuario
         opcion = menu(titulo, opciones, n);
         //una vez el usuario selecciona el tipo de usuario a eliminar se busca
         //en la lista y se elimina
-        listaTiposUsuario->goToStart();
+        controlPrincipal->getTiposAdmin()->goToStart();
         for (int i = 1; i < opcion; ++i) {
-            listaTiposUsuario->next();
+            controlPrincipal->getTiposAdmin()->next();
         }
-        listaTiposUsuario->remove();
-        cout << "\n\n\tUsuario eliminado exitosamente!";
+        controlPrincipal->getTiposAdmin()->remove();
+        cout << "\n\n\tUsuario eliminado exitosamente!\n";
+        controlPrincipal->getTiposAdmin()->print();
     }
     _getch();
     system("cls");
@@ -190,14 +186,11 @@ void agregarArea() {
     cout << "\n\tDescripción: ";
     cin >> descripcion;
     cout << "\n\tCodigo: ";
-    cin >> codigo;
+    cin >> codigo; //verificar que en la lista de areas no haya una con codigo igual
     cout << "\n\tCantidad de Ventanillas: ";
-    cin >> cantVentanillas;
+    cin >> cantVentanillas; 
 
-    Area nuevaArea = Area(descripcion, codigo, cantVentanillas);
-    
-    listaAreas->insert(nuevaArea);
-    listaAreas->print();
+    controlPrincipal->agregarArea(descripcion, codigo, cantVentanillas);
     cout << "\n\Area agregada exitosamente!";
     _getch();
     system("cls");
@@ -206,7 +199,7 @@ void modificarVentanillasArea() {
     bool on = true;
     int opcion;
     const char* titulo = "Modificar Cantidad de Ventanillas";
-    int n = listaAreas->getSize(); //obtiene el tamano de la lista de tipos de usuario
+    int n = controlPrincipal->getAreas()->getSize(); //obtiene el tamano de la lista de tipos de usuario
     system("cls");
 
     //Si no hay usuario por eliminar muestra un mensaje
@@ -216,29 +209,78 @@ void modificarVentanillasArea() {
     else {
         const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
         int index = 0;
-        listaAreas->goToStart();
+        controlPrincipal->getAreas()->goToStart();
 
         //recorre la lista de tipos de usuarios existentes para crear las opciones de eliminar
         listaAreas->goToStart();
-        for (int i = 0; i < listaAreas->getSize(); ++i) {
-            Area current = listaAreas->getElement();
+        for (int i = 0; i < controlPrincipal->getAreas()->getSize(); ++i) {
+            Area& current = controlPrincipal->getAreas()->getElement();
             const string::size_type size = current.getCodigo().size();
             char* codigo = new char[size + 1];
             memcpy(codigo, current.getCodigo().c_str(), size + 1);
             opciones[i] = codigo;
-            listaAreas->next();
+            controlPrincipal->getAreas()->next();
+        }
+
+        //crea el menu de eliminar tipos de usuario
+        opcion = menu(titulo, opciones, n);
+
+        int cantVentanillas;
+
+        system("cls");
+        cout << "\n\tCantidad de Ventanillas Nueva: ";
+        cin >> cantVentanillas;
+
+        controlPrincipal->getAreas()->goToStart();
+        for (int i = 1; i < opcion; ++i) {
+            controlPrincipal->getAreas()->next();
+        }
+        Area& areaToManip = controlPrincipal->getAreas()->getElement();
+        areaToManip.setCantVentanillas(cantVentanillas);
+        cout << "\n\n\tArea editada exitosamente!\n";
+        controlPrincipal->getAreas()->print();
+    }
+    _getch();
+    system("cls");
+}
+void eliminarArea() {
+    bool on = true;
+    int opcion;
+    const char* titulo = "Eliminar Tipos de Usuario";
+    int n = controlPrincipal->getAreas()->getSize(); //obtiene el tamano de la lista de tipos de usuario
+    system("cls");
+
+    //Si no hay usuario por eliminar muestra un mensaje
+    if (n == 0) {
+        cout << "\n\n\tNo hay usuarios para eliminar";
+    }
+    else {
+        const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
+        int index = 0;
+        controlPrincipal->getAreas()->goToStart();
+
+        //recorre la lista de tipos de usuarios existentes para crear las opciones de eliminar
+        controlPrincipal->getAreas()->goToStart();
+        for (int i = 0; i < controlPrincipal->getAreas()->getSize(); ++i) {
+            Area& current = controlPrincipal->getAreas()->getElement();
+            const string::size_type size = current.getCodigo().size();
+            char* descripcion = new char[size + 1];
+            memcpy(descripcion, current.getCodigo().c_str(), size + 1);
+            opciones[i] = descripcion;
+            controlPrincipal->getAreas()->next();
         }
 
         //crea el menu de eliminar tipos de usuario
         opcion = menu(titulo, opciones, n);
         //una vez el usuario selecciona el tipo de usuario a eliminar se busca
         //en la lista y se elimina
-        listaAreas->goToStart();
+        controlPrincipal->getAreas()->goToStart();
         for (int i = 1; i < opcion; ++i) {
-            listaAreas->next();
+            controlPrincipal->getAreas()->next();
         }
-        Area areaToManip = listaAreas->getElement();
-        cout << "\n\n\tArea editada exitosamente!";
+        controlPrincipal->getAreas()->remove();
+        cout << "\n\n\tUsuario eliminado exitosamente!\n";
+        controlPrincipal->getAreas()->print();
     }
     _getch();
     system("cls");
@@ -260,10 +302,171 @@ void menuGestorAreas() {
             modificarVentanillasArea();
             break;
         case 3:
+            eliminarArea();
             break;
         case 4:
+            on = false;
             break;
-        case 5:
+        }
+    } while (on);
+}
+void agregarServicio() {
+    int opcion;
+    string descripcion;
+    int prioridad;
+
+    system("cls");
+    cout << "\n\t\t\tAgregar Servicio" << endl;
+    cout << "\n\tDescripción: ";
+    cin >> descripcion;
+    cout << "\n\tPrioridad: ";
+    cin >> prioridad; //verificar que en la lista de areas no haya una con codigo igual
+    system("cls");
+    const char* titulo = "Area para Agregar";
+    int n = controlPrincipal->getAreas()->getSize(); //obtiene el tamano de la lista de tipos de usuario
+    system("cls");
+
+    //Si no hay usuario por eliminar muestra un mensaje
+    if (n == 0) {
+        cout << "\n\n\tNo hay Areas para generar servicios";
+    }
+    else {
+        const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
+        int index = 0;
+        controlPrincipal->getAreas()->goToStart();
+
+        //recorre la lista de tipos de usuarios existentes para crear las opciones de eliminar
+        controlPrincipal->getAreas()->goToStart();
+        for (int i = 0; i < controlPrincipal->getAreas()->getSize(); ++i) {
+            Area& current = controlPrincipal->getAreas()->getElement();
+            const string::size_type size = current.getCodigo().size();
+            char* descripcion = new char[size + 1];
+            memcpy(descripcion, current.getCodigo().c_str(), size + 1);
+            opciones[i] = descripcion;
+            controlPrincipal->getAreas()->next();
+        }
+
+        //crea el menu de eliminar tipos de usuario
+        opcion = menu(titulo, opciones, n);
+        //una vez el usuario selecciona el tipo de usuario a eliminar se busca
+        //en la lista y se elimina
+        controlPrincipal->getAreas()->goToStart();
+        for (int i = 1; i < opcion; ++i) {
+            controlPrincipal->getAreas()->next();
+        }
+        Area& areaToManip = controlPrincipal->getAreas()->getElement();
+        Area* areaToManipPtr = &areaToManip;
+        controlPrincipal->agregarServicio(descripcion, areaToManipPtr, prioridad);
+        cout << "\n\Area agregada exitosamente!";
+        controlPrincipal->getServicios()->print();
+    }
+    _getch();
+    system("cls");
+}
+void eliminarServicio() {
+    bool on = true;
+    int opcion;
+    const char* titulo = "Eliminar Servicio";
+    int n = controlPrincipal->getServicios()->getSize(); //obtiene el tamano de la lista de tipos de usuario
+    system("cls");
+
+    //Si no hay usuario por eliminar muestra un mensaje
+    if (n == 0) {
+        cout << "\n\n\tNo hay usuarios para eliminar";
+    }
+    else {
+        const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
+        int index = 0;
+        controlPrincipal->getServicios()->goToStart();
+
+        //recorre la lista de tipos de usuarios existentes para crear las opciones de eliminar
+        controlPrincipal->getServicios()->goToStart();
+        for (int i = 0; i < controlPrincipal->getServicios()->getSize(); ++i) {
+            Servicio& current = controlPrincipal->getServicios()->getElement();
+            const string::size_type size = current.getDescripcion().size();
+            char* descripcion = new char[size + 1];
+            memcpy(descripcion, current.getDescripcion().c_str(), size + 1);
+            opciones[i] = descripcion;
+            controlPrincipal->getServicios()->next();
+        }
+
+        //crea el menu de eliminar tipos de usuario
+        opcion = menu(titulo, opciones, n);
+        //una vez el usuario selecciona el tipo de usuario a eliminar se busca
+        //en la lista y se elimina
+        controlPrincipal->getServicios()->goToStart();
+        for (int i = 1; i < opcion; ++i) {
+            controlPrincipal->getServicios()->next();
+        }
+        controlPrincipal->getServicios()->remove();
+        cout << "\n\n\tServicio eliminado exitosamente!\n";
+        controlPrincipal->getServicios()->print();
+    }
+    _getch();
+    system("cls");
+}
+void reordenarServicio() {
+    bool on = true;
+    int opcion;
+    const char* titulo = "Eliminar Servicio";
+    int n = controlPrincipal->getServicios()->getSize(); //obtiene el tamano de la lista de tipos de usuario
+    system("cls");
+
+    //Si no hay usuario por eliminar muestra un mensaje
+    if (n == 0) {
+        cout << "\n\n\tNo hay usuarios para eliminar";
+    }
+    else {
+        const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
+        int index = 0;
+        controlPrincipal->getServicios()->goToStart();
+
+        //recorre la lista de tipos de usuarios existentes para crear las opciones de eliminar
+        controlPrincipal->getServicios()->goToStart();
+        for (int i = 0; i < controlPrincipal->getServicios()->getSize(); ++i) {
+            Servicio& current = controlPrincipal->getServicios()->getElement();
+            const string::size_type size = current.getDescripcion().size();
+            char* descripcion = new char[size + 1];
+            memcpy(descripcion, current.getDescripcion().c_str(), size + 1);
+            opciones[i] = descripcion;
+            controlPrincipal->getServicios()->next();
+        }
+
+        //crea el menu de eliminar tipos de usuario
+        opcion = menu(titulo, opciones, n);
+        //una vez el usuario selecciona el tipo de usuario a eliminar se busca
+        //en la lista y se elimina
+        controlPrincipal->getServicios()->goToStart();
+        for (int i = 1; i < opcion; ++i) {
+            controlPrincipal->getServicios()->next();
+        }
+        controlPrincipal->getServicios()->remove();
+        cout << "\n\n\tServicio eliminado exitosamente!\n";
+        controlPrincipal->getServicios()->print();
+    }
+    _getch();
+    system("cls");
+}
+void menuGestorServicios() {
+    bool on = true;
+    int opcion;
+    const char* titulo = "Menu Gestor de Servicios";
+    const char* opciones[] = { "Agregar Servicio","Eliminar Servicio", "Reordenar Servicios", "Regresar" };
+    int n = 4;
+    do {
+        opcion = menu(titulo, opciones, n);
+
+        switch (opcion) {
+        case 1:
+            agregarServicio();
+            break;
+        case 2:
+            eliminarServicio();
+            break;
+        case 3:
+            reordenarServicio();
+            break;
+        case 4:
             on = false;
             break;
         }
@@ -286,6 +489,7 @@ void menuAdmin() {
             menuGestorAreas();
             break;
         case 3:
+            menuGestorServicios();
             break;
         case 4:
             break;
