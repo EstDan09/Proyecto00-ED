@@ -6,13 +6,14 @@
 #include "Servicio.h"
 #include "DLinkedList.h"
 #include "PriorityQueue.h"
+#include "Tiquete.h"
 #include "TipoUsuarioClientes.h"
 
 using namespace std;
 class Control {
 private:
 	List<TipoUsuario>* tiposAdmin;
-	PriorityQueue<TipoUsuarioClientes>* tiposPublica;
+	PriorityQueue<Tiquete>* tiquetes;
 	List<Servicio>* servicios;
 	List<Area>* areas;
 
@@ -21,11 +22,11 @@ public:
 		this->areas = new DLinkedList<Area>();
 		this->servicios = new DLinkedList<Servicio>();
 		this->tiposAdmin = new DLinkedList<TipoUsuario>();
-		this->tiposPublica = new HeapPriorityQueue<TipoUsuarioClientes>();
+		this->tiquetes = new HeapPriorityQueue<Tiquete>();
 	}
 	~Control() {
 		delete tiposAdmin;
-		delete tiposPublica;
+		delete tiquetes;
 		delete servicios;
 		delete areas;
 	}
@@ -34,8 +35,8 @@ public:
 	List<TipoUsuario>* getTiposAdmin() {
 		return tiposAdmin;
 	}
-	PriorityQueue<TipoUsuarioClientes>* getTiposPublica() {
-		return tiposPublica;
+	PriorityQueue<Tiquete>* getTiquetes() {
+		return tiquetes;
 	}
 	List<Area>* getAreas() {
 		return areas;
@@ -46,9 +47,10 @@ public:
 		cout << "dasdasd";
 		tiposAdmin->print();
 	}
-	void agregarTipoUsuarioActivos(string descripcion, int prioridad) {
-		TipoUsuarioClientes t = TipoUsuarioClientes(descripcion, prioridad);
-		tiposPublica->insert(t, prioridad);
+	void agregarTiquete(int numTiquete, string areaCode, int prioUser, int prioServ) {
+		Tiquete t = Tiquete(numTiquete, areaCode, prioUser, prioServ);
+		int prioridad = t.getPrioridadFinal();
+		tiquetes->insert(t, prioridad);
 	}
 
 	//metodos Area//

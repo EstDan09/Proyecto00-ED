@@ -509,6 +509,9 @@ void menuTiquetes() {
     int opcion;
     const char* titulo = "Eliminar Tipos de Usuario";
     int n = controlPrincipal->getTiposAdmin()->getSize(); //obtiene el tamano de la lista de tipos de usuario
+    int priorityToGiveUsr;
+    int pripriorityToGiveServ;
+    string areaCode;
     system("cls");
 
     //Si no hay usuario por eliminar muestra un mensaje
@@ -539,19 +542,14 @@ void menuTiquetes() {
         for (int i = 1; i < opcion; ++i) {
             controlPrincipal->getTiposAdmin()->next();
         }
-        
-        string descripcionToGive = controlPrincipal->getTiposAdmin()->getElement().getDescripcion();
-        int priorityToGive = controlPrincipal->getTiposAdmin()->getElement().getPrioridad();
-
-        controlPrincipal->agregarTipoUsuarioActivos(descripcionToGive,priorityToGive);
-
+       
+        priorityToGiveUsr = controlPrincipal->getTiposAdmin()->getElement().getPrioridad();
         cout << "\n\n\tUsuario seleccionado exitosamente!\n";
-        controlPrincipal->getTiposPublica()->print();
 
     }
     _getch();
     on = true;
-    titulo = "Selecciona El Servicio;
+    titulo = "Modificar Cantidad de Ventanillas";
     n = controlPrincipal->getServicios()->getSize(); //obtiene el tamano de la lista de tipos de usuario
     system("cls");
 
@@ -577,18 +575,17 @@ void menuTiquetes() {
         //crea el menu de eliminar tipos de usuario
         opcion = menu(titulo, opciones, n);
 
-        int newPos;
-
-        system("cls");
-        cout << "\n\tPosicion que deseas para el servicio seleccionado: ";
-        cin >> newPos;
-
         controlPrincipal->getServicios()->goToStart();
         for (int i = 1; i < opcion; ++i) {
             controlPrincipal->getServicios()->next();
         }
-        int posServ = controlPrincipal->getServicios()->getPos();
-
+        pripriorityToGiveServ = controlPrincipal->getServicios()->getElement().getPrioridad();
+        areaCode = controlPrincipal->getServicios()->getElement().getArea()->getCodigo();
+        controlPrincipal->agregarTiquete(ticketCounter, areaCode, priorityToGiveUsr, pripriorityToGiveServ);
+        ticketCounter++;
+        cout << "\n\n\tTiquete creado exitosamente!\n";
+        controlPrincipal->getTiquetes()->print();
+    }
 
 }
 void menuPrincipal() {
