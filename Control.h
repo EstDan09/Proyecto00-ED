@@ -6,12 +6,13 @@
 #include "Servicio.h"
 #include "DLinkedList.h"
 #include "PriorityQueue.h"
+#include "TipoUsuarioClientes.h"
 
 using namespace std;
 class Control {
 private:
 	List<TipoUsuario>* tiposAdmin;
-	PriorityQueue<TipoUsuario>* tiposPublica;
+	PriorityQueue<TipoUsuarioClientes>* tiposPublica;
 	List<Servicio>* servicios;
 	List<Area>* areas;
 
@@ -20,7 +21,7 @@ public:
 		this->areas = new DLinkedList<Area>();
 		this->servicios = new DLinkedList<Servicio>();
 		this->tiposAdmin = new DLinkedList<TipoUsuario>();
-		this->tiposPublica = new HeapPriorityQueue<TipoUsuario>();
+		this->tiposPublica = new HeapPriorityQueue<TipoUsuarioClientes>();
 	}
 	~Control() {
 		delete tiposAdmin;
@@ -33,7 +34,7 @@ public:
 	List<TipoUsuario>* getTiposAdmin() {
 		return tiposAdmin;
 	}
-	PriorityQueue<TipoUsuario>* getTiposPublica() {
+	PriorityQueue<TipoUsuarioClientes>* getTiposPublica() {
 		return tiposPublica;
 	}
 	List<Area>* getAreas() {
@@ -46,7 +47,7 @@ public:
 		tiposAdmin->print();
 	}
 	void agregarTipoUsuarioActivos(string descripcion, int prioridad) {
-		TipoUsuario t =  TipoUsuario(descripcion, prioridad);
+		TipoUsuarioClientes t = TipoUsuarioClientes(descripcion, prioridad);
 		tiposPublica->insert(t, prioridad);
 	}
 
