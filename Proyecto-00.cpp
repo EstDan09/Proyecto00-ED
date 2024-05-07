@@ -323,13 +323,13 @@ void agregarServicio() {
     cout << "\n\tPrioridad: ";
     cin >> prioridad; //verificar que en la lista de areas no haya una con codigo igual
     system("cls");
-    const char* titulo = "Area para Agregar";
+    const char* titulo = "Área para Agregar";
     int n = controlPrincipal->getAreas()->getSize(); //obtiene el tamano de la lista de tipos de usuario
     system("cls");
 
     //Si no hay usuario por eliminar muestra un mensaje
     if (n == 0) {
-        cout << "\n\n\tNo hay Areas para generar servicios";
+        cout << "\n\n\tNo hay Áreas para generar servicios";
     }
     else {
         const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
@@ -415,7 +415,7 @@ void reordenarServicio() {
 
     //Si no hay usuario por eliminar muestra un mensaje
     if (n == 0) {
-        cout << "\n\n\tNo hay areas cuyas ventanillas puedes modificar :( que triste";
+        cout << "\n\n\tNo hay áreas cuyas ventanillas puedes modificar :( que triste";
     }
     else {
         const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
@@ -661,11 +661,14 @@ void revisarColas() {
     }
 }
 
+
+
+
 void menuPrincipal() {
    
     bool on = true;
     int opcion;
-    const char* titulo = "Menu Principale";
+    const char* titulo = "Menu Principal";
     const char* opciones[] = { "Revisar Colas", "Generar Tiquetes", "Atender", "Modo Administrativo", "Estadisitcas", "Salir" };
     int n = 6;
     do {
