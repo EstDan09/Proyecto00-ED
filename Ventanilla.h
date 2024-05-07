@@ -21,6 +21,14 @@ public:
 		this->currentTiquete = nullptr;
 	}
 
+	string getNombre() {
+		return nombre;
+	}
+
+	Tiquete* getCurrentTiquete() {
+		return currentTiquete;
+	}
+
 	bool operator==(const Ventanilla& other) const {
 		// Compare the 'nombre' attribute of the Ventanilla objects
 		return this->nombre == other.nombre;

@@ -9,6 +9,7 @@
 #include <vector>
 
 using namespace std;
+using std::string;
 
 #define TECLA_ARRIBA 72
 #define TECLA_ABAJO 80
@@ -37,7 +38,7 @@ void gotoxy(int x, int y) {
 /*
 settings
 */
-int ticketCounter = 0;
+int ticketCounter = 100;
 int priorityLvlsUsers = 5;
 
 /*
@@ -339,9 +340,9 @@ void agregarServicio() {
         controlPrincipal->getAreas()->goToStart();
         for (int i = 0; i < controlPrincipal->getAreas()->getSize(); ++i) {
             Area& current = controlPrincipal->getAreas()->getElement();
-            const string::size_type size = current.getCodigo().size();
+            const string::size_type size = current.getDescripcion().size();
             char* descripcion = new char[size + 1];
-            memcpy(descripcion, current.getCodigo().c_str(), size + 1);
+            memcpy(descripcion, current.getDescripcion().c_str(), size + 1);
             opciones[i] = descripcion;
             controlPrincipal->getAreas()->next();
         }
@@ -507,21 +508,20 @@ void menuAdmin() {
 void menuTiquetes() {
     bool on = true;
     int opcion;
-    const char* titulo = "Eliminar Tipos de Usuario";
+    const char* titulo = "Seleccionar usuario";
     int n = controlPrincipal->getTiposAdmin()->getSize(); //obtiene el tamano de la lista de tipos de usuario
     int priorityToGiveUsr;
     int pripriorityToGiveServ;
     string areaCode;
     system("cls");
 
-    //Si no hay usuario por eliminar muestra un mensaje
+    //Si no hay usuario muestra un mensaje
     if (n == 0) {
-        cout << "\n\n\tNo hay usuarios para eliminar";
+        cout << "\n\n\tNo hay tipos de usuarios registrados en el sistema.";
+        _getch();
     }
     else {
         const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
-        int index = 0;
-        controlPrincipal->getTiposAdmin()->goToStart();
 
         //recorre la lista de tipos de usuarios existentes para crear las opciones de eliminar
         controlPrincipal->getTiposAdmin()->goToStart();
@@ -534,60 +534,133 @@ void menuTiquetes() {
             controlPrincipal->getTiposAdmin()->next();
         }
 
-        //crea el menu de eliminar tipos de usuario
+        //crea el menu de tipos de usuario
         opcion = menu(titulo, opciones, n);
-        //una vez el usuario selecciona el tipo de usuario a eliminar se busca
-        //en la lista y se elimina
+        //se selecciona el tipo de usuario
         controlPrincipal->getTiposAdmin()->goToStart();
         for (int i = 1; i < opcion; ++i) {
             controlPrincipal->getTiposAdmin()->next();
         }
-       
+
         priorityToGiveUsr = controlPrincipal->getTiposAdmin()->getElement().getPrioridad();
         cout << "\n\n\tUsuario seleccionado exitosamente!\n";
 
+
+        _getch();
+        on = true;
+        titulo = "Seleccionar servicio";
+        n = controlPrincipal->getServicios()->getSize(); //obtiene el tamano de la lista de tipos de usuario
+        system("cls");
+
+        //Si no hay servicios se muestra un mensaje
+        if (n == 0) {
+            cout << "\n\n\tNo hay serivcios registrado en el sistema";
+            _getch();
+        }
+        else {
+            const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
+
+            //recorre la lista de servicios existentes para crear las opciones 
+            controlPrincipal->getServicios()->goToStart();
+            for (int i = 0; i < controlPrincipal->getServicios()->getSize(); ++i) {
+                Servicio& current = controlPrincipal->getServicios()->getElement();
+                const string::size_type size = current.getDescripcion().size();
+                char* codigo = new char[size + 1];
+                memcpy(codigo, current.getDescripcion().c_str(), size + 1);
+                opciones[i] = codigo;
+                controlPrincipal->getServicios()->next();
+            }
+
+            //crea el menu de servicios
+            opcion = menu(titulo, opciones, n);
+
+            controlPrincipal->getServicios()->goToStart();
+            for (int i = 1; i < opcion; ++i) {
+                controlPrincipal->getServicios()->next();
+            }
+            pripriorityToGiveServ = controlPrincipal->getServicios()->getElement().getPrioridad();
+            areaCode = controlPrincipal->getServicios()->getElement().getArea()->getCodigo();
+            controlPrincipal->agregarTiquete(ticketCounter, areaCode, priorityToGiveUsr, pripriorityToGiveServ);
+            ticketCounter++;
+            cout << "\n\n\tTiquete creado exitosamente!\n";
+            controlPrincipal->getTiquetes()->print(); //Imprimir los tiquetes por area *******
+            _getch();
+        }
     }
-    _getch();
-    on = true;
-    titulo = "Modificar Cantidad de Ventanillas";
-    n = controlPrincipal->getServicios()->getSize(); //obtiene el tamano de la lista de tipos de usuario
+}
+
+void revisarColas() {
+    bool on = true;
+    int opcion;
+    const char* titulo = "Seleccionar Área";
+    int n = controlPrincipal->getAreas()->getSize(); //obtiene el tamano de la lista de areas
     system("cls");
 
-    //Si no hay usuario por eliminar muestra un mensaje
+    //Si no hay areas muestra un mensaje
     if (n == 0) {
-        cout << "\n\n\tNo hay areas cuyas ventanillas puedes modificar :( que triste";
+        cout << "\n\n\tNo hay áreas registradas en el sistema.";
+        _getch();
     }
     else {
         const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
-        int index = 0;
-        controlPrincipal->getServicios()->goToStart();
 
-        //recorre la lista de tipos de usuarios existentes para crear las opciones de eliminar
-        for (int i = 0; i < controlPrincipal->getServicios()->getSize(); ++i) {
-            Servicio& current = controlPrincipal->getServicios()->getElement();
+        //recorre la lista de areas existentes para crear las opciones
+        controlPrincipal->getAreas()->goToStart();
+        for (int i = 0; i < controlPrincipal->getAreas()->getSize(); ++i) {
+            Area current = controlPrincipal->getAreas()->getElement();
             const string::size_type size = current.getDescripcion().size();
-            char* codigo = new char[size + 1];
-            memcpy(codigo, current.getDescripcion().c_str(), size + 1);
-            opciones[i] = codigo;
-            controlPrincipal->getServicios()->next();
+            char* descripcion = new char[size + 1];
+            memcpy(descripcion, current.getDescripcion().c_str(), size + 1);
+            opciones[i] = descripcion;
+            controlPrincipal->getAreas()->next();
         }
 
-        //crea el menu de eliminar tipos de usuario
+        //crea el menu de areas
         opcion = menu(titulo, opciones, n);
-
-        controlPrincipal->getServicios()->goToStart();
+        //se selecciona el area
+        controlPrincipal->getAreas()->goToStart();
         for (int i = 1; i < opcion; ++i) {
-            controlPrincipal->getServicios()->next();
+            controlPrincipal->getAreas()->next();
         }
-        pripriorityToGiveServ = controlPrincipal->getServicios()->getElement().getPrioridad();
-        areaCode = controlPrincipal->getServicios()->getElement().getArea()->getCodigo();
-        controlPrincipal->agregarTiquete(ticketCounter, areaCode, priorityToGiveUsr, pripriorityToGiveServ);
-        ticketCounter++;
-        cout << "\n\n\tTiquete creado exitosamente!\n";
-        controlPrincipal->getTiquetes()->print();
-    }
 
+        cout << "\n\n\tÁrea seleccionada exitosamente!\n";
+
+        _getch();
+        on = true;
+        titulo = "Seleccionar Ventanilla";
+        n = controlPrincipal->getAreas()->getElement().getVentanillas()->getSize(); //obtiene el tamano de la lista de ventanillas del area
+        system("cls");
+
+        //Si no hay servicios se muestra un mensaje
+        if (n == 0) {
+            cout << "\n\n\tNo hay ventanillas registrada en el área";
+            _getch();
+        }
+        else {
+            const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
+
+            //recorre la lista de servicios existentes para crear las opciones 
+            controlPrincipal->getAreas()->getElement().getVentanillas()->goToStart();
+            for (int i = 0; i < controlPrincipal->getAreas()->getElement().getVentanillas()->getSize(); ++i) {
+                Ventanilla& current = controlPrincipal->getAreas()->getElement().getVentanillas()->getElement();
+                string codigo = "Ningún tiquete ha sido atendido";
+                if (current.getCurrentTiquete() != nullptr) {
+                    codigo = current.getCurrentTiquete()->getCodigo();
+                }
+
+                cout << "\n\n\t" << current.getNombre() << ": " << codigo << "\n";
+                controlPrincipal->getAreas()->getElement().getVentanillas()->next();
+            }
+
+            cout << "\n\n\tEstado de colas\n";
+            cout << "\n\n\t";
+            controlPrincipal->getTiquetes()->print();
+            _getch();
+
+        }
+    }
 }
+
 void menuPrincipal() {
    
     bool on = true;
@@ -600,7 +673,7 @@ void menuPrincipal() {
 
         switch (opcion) {
         case 1:
-            
+            revisarColas();
             break;
         case 2:
             menuTiquetes();

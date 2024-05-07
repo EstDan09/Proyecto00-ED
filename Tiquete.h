@@ -8,24 +8,26 @@ using std::string;
 using std::cout;
 using std::endl;
 using std::ostream;
-using std::time_t;
 using std::ostringstream;
 
 class Tiquete
 {
 private:
 	string codigo;
-	std::chrono::system_clock::time_point fechaCreacion;
+	string codigoArea;
+	time_t fechaCreacion;
 	int prioridadFinal = 0;
+
 public:
 	Tiquete() {
 
 	}
 	Tiquete(int ticketCounter, string codArea, int prioUser, int prioServ) {
 		string intStr = std::to_string(ticketCounter);
+		this->codigoArea = codArea;
 		this->codigo = codArea + intStr;
 		this->setPrioridadFinal(prioUser, prioServ);
-		this->prioridadFinal = getPrioridadFinal();
+		this->fechaCreacion = time(0);
 	}
 
 	~Tiquete() {
@@ -40,12 +42,11 @@ public:
 	}
 
 	string getFecha() const {
-		std::time_t tiempo_actual = std::chrono::system_clock::to_time_t(fechaCreacion);
-		std::tm tiempo;
-		localtime_s(&tiempo, &tiempo_actual); // Utiliza localtime_s para evitar la advertencia
+		tm tiempo;
+		localtime_s(&tiempo, &fechaCreacion); // Utiliza localtime_s para evitar la advertencia
 		const int buffer_size = 9; // Tamaño suficiente para la hora (HH:MM:SS) + el carácter nulo
 		char buffer[buffer_size];
-		std::strftime(buffer, buffer_size, "%H:%M:%S", &tiempo); // Formatear la hora en formato de 24 horas con minutos y segundos
+		strftime(buffer, buffer_size, "%H:%M:%S", &tiempo); // Formatear la hora en formato de 24 horas con minutos y segundos
 		return string(buffer);
 	}
 

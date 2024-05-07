@@ -104,7 +104,7 @@ public:
 	void print() {
 		cout << "[ ";
 		for (int i = 0; i < size; i++) {
-			cout << elements[i] << " ";
+			cout << elements[i] << " \n";
 		}
 		cout << "]" << endl;
 	}

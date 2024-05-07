@@ -27,7 +27,7 @@ public:
 		delete pairs;
 	}
 	void insert(E element, int priority) {
-		if (priority < 0 || priority >= priorities)
+		if (priority < 0)
 			throw runtime_error("Invalid priority.");
 		KVPair<int, E> p(priority, element);
 		pairs->insert(p);

@@ -40,6 +40,9 @@ public:
 	string getCodigo() {
 		return this->codigo;
 	}
+	string getDescripcion() {
+		return this->descripcion;
+	}
 	DLinkedList<Ventanilla>* getVentanillas() {
 		return ventanillas;
 	}
