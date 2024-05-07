@@ -583,7 +583,7 @@ void menuTiquetes() {
             controlPrincipal->agregarTiquete(ticketCounter, areaCode, priorityToGiveUsr, pripriorityToGiveServ);
             ticketCounter++;
             cout << "\n\n\tTiquete creado exitosamente!\n";
-            controlPrincipal->getTiquetes()->print(); //Imprimir los tiquetes por area *******
+            controlPrincipal->getTiquetes()->print(); 
             _getch();
         }
     }
@@ -654,7 +654,7 @@ void revisarColas() {
 
             cout << "\n\n\tEstado de colas\n";
             cout << "\n\n\t";
-            controlPrincipal->getTiquetes()->print();
+            controlPrincipal->getTiquetes()->print();//Imprimir los tiquetes por area *******
             _getch();
 
         }
