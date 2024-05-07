@@ -60,7 +60,7 @@ public:
 	friend ostream& operator<<(ostream& os, const Area& area) {
 		os << "Descripción: " << area.descripcion << ", Codigo: " << area.codigo << ", Cant.Ventanillas: " << area.cantVentanas;
 		return os;
-	}
+	}//test
 
 };
 
