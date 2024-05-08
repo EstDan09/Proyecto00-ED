@@ -193,7 +193,7 @@ void agregarArea() {
     cin >> cantVentanillas; 
 
     controlPrincipal->agregarArea(descripcion, codigo, cantVentanillas);
-    cout << "\n\tÁrea agregada exitosamente!";
+    cout << "\n\n\tÁrea agregada exitosamente!";
     controlPrincipal->getAreas()->print("Áreas");
     _getch();
     system("cls");
@@ -593,13 +593,13 @@ void menuTiquetes() {
 void revisarColas() {
     bool on = true;
     int opcion;
-    const char* titulo = "Seleccionar �rea";
+    const char* titulo = "Seleccionar Área";
     int n = controlPrincipal->getAreas()->getSize(); //obtiene el tamano de la lista de areas
     system("cls");
 
     //Si no hay areas muestra un mensaje
     if (n == 0) {
-        cout << "\n\n\tNo hay �reas registradas en el sistema.";
+        cout << "\n\n\tNo hay áreas registradas en el sistema.";
         _getch();
     }
     else {
@@ -644,9 +644,9 @@ void revisarColas() {
             controlPrincipal->getAreas()->getElement().getVentanillas()->goToStart();
             for (int i = 0; i < controlPrincipal->getAreas()->getElement().getVentanillas()->getSize(); ++i) {
                 Ventanilla& current = controlPrincipal->getAreas()->getElement().getVentanillas()->getElement();
-                string codigo = "Ning�n tiquete ha sido atendido";
-                if (current.getCurrentTiquete() != nullptr) {
-                    codigo = current.getCurrentTiquete()->getCodigo();
+                string codigo = "Ningún tiquete ha sido atendido";
+                if (current.getCurrentTiquete().getCodigo() != "") {
+                    codigo = current.getCurrentTiquete().getCodigo();
                 }
 
                 cout << "\n\n\t" << current.getNombre() << ": " << codigo << "\n";
@@ -654,11 +654,10 @@ void revisarColas() {
             }
 
             cout << "\n\n\tEstado de colas\n";
-            if (controlPrincipal->getAreas()->getElement().getTiquetes() == nullptr) {
+            if (controlPrincipal->getAreas()->getElement().getTiquetes()->isEmpty()) {
                 cout << "\n\n\tNo hay tiquetes en la cola de esta área\n";
             }
             else {
-                cout << "\n\n\t";
                 controlPrincipal->getAreas()->getElement().getTiquetes()->print();
             }
 
@@ -667,6 +666,95 @@ void revisarColas() {
         }
     }
 }
+
+void atender() {
+    bool on = true;
+    int opcion;
+    const char* titulo = "Seleccionar Área";
+    int n = controlPrincipal->getAreas()->getSize(); //obtiene el tamano de la lista de areas
+    system("cls");
+
+    //Si no hay areas muestra un mensaje
+    if (n == 0) {
+        cout << "\n\n\tNo hay áreas registradas en el sistema.";
+        _getch();
+    }
+    else {
+        const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
+
+        //recorre la lista de areas existentes para crear las opciones
+        controlPrincipal->getAreas()->goToStart();
+        for (int i = 0; i < controlPrincipal->getAreas()->getSize(); ++i) {
+            Area current = controlPrincipal->getAreas()->getElement();
+            const string::size_type size = current.getDescripcion().size();
+            char* descripcion = new char[size + 1];
+            memcpy(descripcion, current.getDescripcion().c_str(), size + 1);
+            opciones[i] = descripcion;
+            controlPrincipal->getAreas()->next();
+        }
+
+        //crea el menu de areas
+        opcion = menu(titulo, opciones, n);
+        //se selecciona el area
+        controlPrincipal->getAreas()->goToStart();
+        for (int i = 1; i < opcion; ++i) {
+            controlPrincipal->getAreas()->next();
+        }
+
+        cout << "\n\n\tárea seleccionada exitosamente!\n";
+        //string areaForExtraction = controlPrincipal->getAreas()->getElement().getCodigo();
+        _getch();
+        on = true;
+        titulo = "Seleccionar Ventanilla";
+        n = controlPrincipal->getAreas()->getElement().getVentanillas()->getSize(); //obtiene el tamano de la lista de ventanillas del area
+        system("cls");
+
+        //Si no hay servicios se muestra un mensaje
+        if (n == 0) {
+            cout << "\n\n\tNo hay ventanillas registrada en el área";
+            _getch();
+        }
+        else {
+            const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
+
+            //recorre la lista de servicios existentes para crear las opciones 
+            controlPrincipal->getAreas()->getElement().getVentanillas()->goToStart();
+            for (int i = 0; i < controlPrincipal->getAreas()->getElement().getVentanillas()->getSize(); ++i) {
+                Ventanilla current = controlPrincipal->getAreas()->getElement().getVentanillas()->getElement();
+                const string::size_type size = current.getNombre().size();
+                char* descripcion = new char[size + 1];
+                memcpy(descripcion, current.getNombre().c_str(), size + 1);
+                opciones[i] = descripcion;
+                controlPrincipal->getAreas()->getElement().getVentanillas()->next();
+            }
+
+            //crea el menu de areas
+            opcion = menu(titulo, opciones, n);
+            //se selecciona el area
+            controlPrincipal->getAreas()->getElement().getVentanillas()->goToStart();
+            for (int i = 1; i < opcion; ++i) {
+                controlPrincipal->getAreas()->getElement().getVentanillas()->next();
+            }
+
+            cout << "\n\n\tVentanilla seleccionada exitosamente!\n";
+            _getch();
+            system("cls");
+            if (controlPrincipal->getAreas()->getElement().getTiquetes()->isEmpty()) {
+                cout << "\n\n\tNo hay tiquetes por atender en el área de la ventanilla\n";
+            }
+            else {
+                controlPrincipal->getAreas()->getElement().getVentanillas()->getElement().setCurrentTiquete(controlPrincipal->getAreas()->getElement().getTiquetes()->min());
+                cout << "\n\n\tEl tiquete " << controlPrincipal->getAreas()->getElement().getTiquetes()->min().getCodigo() << " será atendido en la ventanilla " << controlPrincipal->getAreas()->getElement().getVentanillas()->getElement().getNombre();
+                controlPrincipal->getAreas()->getElement().getTiquetes()->removeMin();
+            }
+
+            
+            _getch();
+
+        }
+    }
+}
+
 void menuPrincipal() {
    
     bool on = true;
@@ -685,6 +773,7 @@ void menuPrincipal() {
             menuTiquetes();
             break;
         case 3:
+            atender();
             break;
         case 4:
             menuAdmin();

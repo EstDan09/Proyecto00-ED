@@ -9,24 +9,28 @@ class Ventanilla
 {
 private:
 	string nombre;
-	Tiquete* currentTiquete;
+	Tiquete currentTiquete;
 public:
 	Ventanilla() {
 		this->nombre = "";
-		this->currentTiquete = nullptr;
+		this->currentTiquete = Tiquete();
 	}
 	Ventanilla(string codeArea, int numVentana) {
 		string intStr = std::to_string(numVentana);
 		this->nombre = codeArea + intStr;
-		this->currentTiquete = nullptr;
+		this->currentTiquete = Tiquete();
 	}
 
 	string getNombre() {
 		return nombre;
 	}
 
-	Tiquete* getCurrentTiquete() {
+	Tiquete getCurrentTiquete() {
 		return currentTiquete;
+	}
+
+	void setCurrentTiquete(Tiquete tiquete) {
+		this->currentTiquete = tiquete;
 	}
 
 	bool operator==(const Ventanilla& other) const {
