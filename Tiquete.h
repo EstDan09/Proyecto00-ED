@@ -41,6 +41,10 @@ public:
 		return this->codigo;
 	}
 
+	string getCodigoArea() {
+		return this->codigoArea;
+	}
+
 	string getFecha() const {
 		tm tiempo;
 		localtime_s(&tiempo, &fechaCreacion); // Utiliza localtime_s para evitar la advertencia

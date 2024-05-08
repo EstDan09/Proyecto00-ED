@@ -31,7 +31,7 @@ public:
 		delete areas;
 	}
 
-	//metodos TipoUsuario//
+	//getters//
 	List<TipoUsuario>* getTiposAdmin() {
 		return tiposAdmin;
 	}
@@ -41,16 +41,13 @@ public:
 	List<Area>* getAreas() {
 		return areas;
 	}
+
+	//metodos TipoUsuario//
 	void agregarTipoUsuarioAdmin(string descripcion, int prioridad) {
 		TipoUsuario t = TipoUsuario(descripcion, prioridad);
 		tiposAdmin->insert(t);
 		cout << "dasdasd";
 		tiposAdmin->print();
-	}
-	void agregarTiquete(int numTiquete, string areaCode, int prioUser, int prioServ) {
-		Tiquete t = Tiquete(numTiquete, areaCode, prioUser, prioServ);
-		int prioridad = t.getPrioridadFinal();
-		tiquetes->insert(t, prioridad);
 	}
 
 	//metodos Area//
@@ -80,4 +77,31 @@ public:
 		servicios->goToPos(posDestino);
 		servicios->insert(s);
 	}
+
+	//metodos Tiquetes//
+	void agregarTiquete(int numTiquete, string areaCode, int prioUser, int prioServ) {
+		Tiquete t = Tiquete(numTiquete, areaCode, prioUser, prioServ);
+		int prioridad = t.getPrioridadFinal();
+		tiquetes->insert(t, prioridad);
+	}
+
+	PriorityQueue<Tiquete>* getTiquetesByArea(string areaCode) {
+		PriorityQueue<Tiquete>* tiquetesToReturn = new HeapPriorityQueue<Tiquete>();
+		PriorityQueue<Tiquete>* temp = tiquetes;
+
+		while (!temp->isEmpty()) {
+			Tiquete t = temp->removeMin(); // Remove the minimum element from temp
+			if (t.getCodigoArea() == areaCode) {
+				tiquetesToReturn->insert(t, t.getPrioridadFinal()); // Insert it into tiquetesToReturn only if it meets the condition
+			}
+		}
+
+		// Clean up temporary memory
+		delete temp;
+
+		return tiquetesToReturn;
+	}
+
+
+
 };

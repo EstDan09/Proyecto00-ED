@@ -45,9 +45,6 @@ int priorityLvlsUsers = 5;
 * listas de administrador para los tipos disponibles
 */
 Control* controlPrincipal = new Control();
-//List<TipoUsuario>* listaTiposUsuario = new DLinkedList<TipoUsuario>();
-//
-//List<Area>* listaAreas = new DLinkedList<Area>();
 
 int menu(const char* titulo, const char* opciones[], int n) {
     int opcionSelect = 1;
@@ -96,7 +93,7 @@ void agregarTipoUsuario() {
 
     system("cls");    
     cout << "\n\t\t\Agrear Tipo de Usuario" << endl;
-    cout << "\n\tDescripción: ";
+    cout << "\n\tDescripciÃ³n: ";
     cin >> descripcion;
     cout << "\n\tPrioridad: ";
     cin >> prioridad;  
@@ -185,7 +182,7 @@ void agregarArea() {
 
     system("cls");
     cout << "\n\t\t\Agrear Area" << endl;
-    cout << "\n\tDescripción: ";
+    cout << "\n\tDescripciï¿½n: ";
     cin >> descripcion;
     cout << "\n\tCodigo: ";
     cin >> codigo; //verificar que en la lista de areas no haya una con codigo igual
@@ -318,18 +315,18 @@ void agregarServicio() {
 
     system("cls");
     cout << "\n\t\t\tAgregar Servicio" << endl;
-    cout << "\n\tDescripción: ";
+    cout << "\n\tDescripciï¿½n: ";
     cin >> descripcion;
     cout << "\n\tPrioridad: ";
     cin >> prioridad; //verificar que en la lista de areas no haya una con codigo igual
     system("cls");
-    const char* titulo = "Área para Agregar";
+    const char* titulo = "ï¿½rea para Agregar";
     int n = controlPrincipal->getAreas()->getSize(); //obtiene el tamano de la lista de tipos de usuario
     system("cls");
 
     //Si no hay usuario por eliminar muestra un mensaje
     if (n == 0) {
-        cout << "\n\n\tNo hay Áreas para generar servicios";
+        cout << "\n\n\tNo hay ï¿½reas para generar servicios";
     }
     else {
         const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
@@ -415,7 +412,7 @@ void reordenarServicio() {
 
     //Si no hay usuario por eliminar muestra un mensaje
     if (n == 0) {
-        cout << "\n\n\tNo hay áreas cuyas ventanillas puedes modificar :( que triste";
+        cout << "\n\n\tNo hay ï¿½reas cuyas ventanillas puedes modificar :( que triste";
     }
     else {
         const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
@@ -588,17 +585,16 @@ void menuTiquetes() {
         }
     }
 }
-
 void revisarColas() {
     bool on = true;
     int opcion;
-    const char* titulo = "Seleccionar Área";
+    const char* titulo = "Seleccionar ï¿½rea";
     int n = controlPrincipal->getAreas()->getSize(); //obtiene el tamano de la lista de areas
     system("cls");
 
     //Si no hay areas muestra un mensaje
     if (n == 0) {
-        cout << "\n\n\tNo hay áreas registradas en el sistema.";
+        cout << "\n\n\tNo hay ï¿½reas registradas en el sistema.";
         _getch();
     }
     else {
@@ -623,8 +619,8 @@ void revisarColas() {
             controlPrincipal->getAreas()->next();
         }
 
-        cout << "\n\n\tÁrea seleccionada exitosamente!\n";
-
+        cout << "\n\n\tarea seleccionada exitosamente!\n";
+        //string areaForExtraction = controlPrincipal->getAreas()->getElement().getCodigo();
         _getch();
         on = true;
         titulo = "Seleccionar Ventanilla";
@@ -633,7 +629,7 @@ void revisarColas() {
 
         //Si no hay servicios se muestra un mensaje
         if (n == 0) {
-            cout << "\n\n\tNo hay ventanillas registrada en el área";
+            cout << "\n\n\tNo hay ventanillas registrada en el ï¿½rea";
             _getch();
         }
         else {
@@ -643,7 +639,7 @@ void revisarColas() {
             controlPrincipal->getAreas()->getElement().getVentanillas()->goToStart();
             for (int i = 0; i < controlPrincipal->getAreas()->getElement().getVentanillas()->getSize(); ++i) {
                 Ventanilla& current = controlPrincipal->getAreas()->getElement().getVentanillas()->getElement();
-                string codigo = "Ningún tiquete ha sido atendido";
+                string codigo = "Ningï¿½n tiquete ha sido atendido";
                 if (current.getCurrentTiquete() != nullptr) {
                     codigo = current.getCurrentTiquete()->getCodigo();
                 }
@@ -654,16 +650,15 @@ void revisarColas() {
 
             cout << "\n\n\tEstado de colas\n";
             cout << "\n\n\t";
-            controlPrincipal->getTiquetes()->print();//Imprimir los tiquetes por area *******
+
+            controlPrincipal->getTiquetesByArea("M")->print();//Imprimir los tiquetes por area *******
+            controlPrincipal->getTiquetes()->print();
+
             _getch();
 
         }
     }
 }
-
-
-
-
 void menuPrincipal() {
    
     bool on = true;
@@ -699,6 +694,13 @@ int main()
 {   
    setlocale(LC_ALL, "spanish"); // para evitar errores en las tildes
    menuPrincipal();
+    //Control cp = Control();
+    //cp.agregarTiquete(1, "C", 2, 4);
+    //cp.getTiquetes()->print();
+    //cp.agregarTiquete(1, "C", 3, 1);
+    //cp.agregarTiquete(1, "C", 1, 2);
+    //cp.agregarTiquete(1, "C", 1, 1);
+    //cp.getTiquetes()->print();
    //poUsuarioClientes clienteP = TipoUsuarioClientes("sd", 5);
    //ut << clienteP.obtenerFechaComoCadena() << endl;
    //cFienteP.obtenerFechaComoCadena();
