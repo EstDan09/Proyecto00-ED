@@ -102,11 +102,12 @@ public:
 		return size == 0;
 	}
 	void print() {
-		cout << "[ ";
+		cout << "\n\n\t" << "Cola" << " ================================";
 		for (int i = 0; i < size; i++) {
-			cout << elements[i] << " \n";
+			cout << "\n\n\t";
+			cout << elements[i] << " ";
 		}
-		cout << "]" << endl;
+		cout << endl;
 	}
 };
 

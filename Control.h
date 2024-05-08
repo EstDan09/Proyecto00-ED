@@ -38,17 +38,24 @@ public:
 
 	//metodos TipoUsuario//
 	void agregarTipoUsuarioAdmin(string descripcion, int prioridad) {
+		tiposAdmin->goToStart();
+		//recorre la lista de tipos de usuarios para agregar el elemento segun la prioridad
+		for (int i = 0; i < tiposAdmin->getSize(); ++i) {
+			TipoUsuario current = tiposAdmin->getElement();
+			if (current.getPrioridad() > prioridad) {
+				break;
+			}
+			tiposAdmin->next();
+		}
 		TipoUsuario t = TipoUsuario(descripcion, prioridad);
 		tiposAdmin->insert(t);
-		cout << "dasdasd";
-		tiposAdmin->print();
+		
 	}
 
 	//metodos Area//
 	void agregarArea(string descripcion, string codigo, int cantVentanillas) {
 		Area a = Area(descripcion, codigo, cantVentanillas);
 		areas->append(a);
-		areas->print();
 	}
 	void modificarCantidadVent(int numArea, int nuevaCantV) {
 		areas->goToPos(numArea - 1);
@@ -62,8 +69,17 @@ public:
 		return servicios;
 	}
 	void agregarServicio(string descripcion, Area* area, int prioridad) {
+		servicios->goToStart();
+		//recorre la lista de servicios para agregar el elemento segun la prioridad
+		for (int i = 0; i < servicios->getSize(); ++i) {
+			Servicio current = servicios->getElement();
+			if (current.getPrioridad() > prioridad) {
+				break;
+			}
+			servicios->next();
+		}
 		Servicio s = Servicio(descripcion, prioridad, area);
-		servicios->append(s);
+		servicios->insert(s);
 	}
 	void reordenarServicios(int numServicio, int posDestino) {
 		servicios->goToPos(numServicio);

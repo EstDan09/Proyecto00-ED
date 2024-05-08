@@ -24,7 +24,7 @@ public: //funciones puramente virtuales que solo tienen implementacion en los su
 	virtual bool atEnd() = 0;
 	virtual int getSize() = 0;
 	virtual int getPos() = 0;
-	virtual void print() = 0;
+	virtual void print(string titulo) = 0;
 	virtual int indexOf(E element) = 0;
 	virtual bool contains(E element) = 0;
 };

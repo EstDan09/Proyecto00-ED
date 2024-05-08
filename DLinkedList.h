@@ -109,14 +109,15 @@ public:
 			temp = temp->next;
 		return i;
 	}
-	void print() {
-		cout << "[ ";
+	void print(string titulo) {
+		cout << "\n\n\t" << titulo <<" ================================";
 		DNode<E>* temp = head->next;
 		while (temp != tail) {
+			cout << "\n\n\t";
 			cout << temp->element << " ";
 			temp = temp->next;
 		}
-		cout << "]" << endl;
+		cout << endl;
 	}
 	int indexOf(E elementToFind) {
 		/*DNode<E>* temp = head->next;

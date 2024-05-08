@@ -34,7 +34,7 @@ public:
 		return this->descripcion;
 	}
 	friend ostream& operator<<(ostream& os, const Servicio& servicio) {
-		os << "Descripción: " << servicio.descripcion << ", Prioridad: " << servicio.prioridad <<", Area: " << servicio.area->getCodigo();
+		os << "Descripción: " << servicio.descripcion << ", Prioridad: " << servicio.prioridad <<", Código de área: " << servicio.area->getCodigo();
 		return os;
 	}
 };

@@ -36,7 +36,7 @@ public:
 			Ventanilla ventanaNueva(this->codigo, numVentana);
 			ventanillas->append(ventanaNueva);
 		}
-		ventanillas->print();
+		ventanillas->print("Ventanillas");
 	}
 	string getCodigo() {
 		return this->codigo;
@@ -59,7 +59,7 @@ public:
 			Ventanilla ventanaNueva(this->codigo, numVentana);
 			ventanillas->append(ventanaNueva);
 		}
-		ventanillas->print();
+		ventanillas->print("Ventanillas");
 	}
 	void setCodigo() {
 		this->codigo = "Z";

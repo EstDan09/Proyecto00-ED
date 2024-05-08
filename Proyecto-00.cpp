@@ -94,7 +94,8 @@ void agregarTipoUsuario() {
     system("cls");    
     cout << "\n\t\t\Agrear Tipo de Usuario" << endl;
     cout << "\n\tDescripción: ";
-    cin >> descripcion;
+    cin.ignore();
+    getline(cin, descripcion);
     cout << "\n\tPrioridad: ";
     cin >> prioridad;  
 
@@ -106,6 +107,8 @@ void agregarTipoUsuario() {
     controlPrincipal->agregarTipoUsuarioAdmin(descripcion, prioridad);
 
     cout << "\n\tUsuario agregado exitosamente!";
+
+    controlPrincipal->getTiposAdmin()->print("Tipos de usuario");
     _getch();
     system("cls");
 
@@ -124,7 +127,6 @@ void eliminarTipoUsuario() {
     else {
         const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
         int index = 0;
-        controlPrincipal->getTiposAdmin()->goToStart();
 
         //recorre la lista de tipos de usuarios existentes para crear las opciones de eliminar
         controlPrincipal->getTiposAdmin()->goToStart();
@@ -147,7 +149,7 @@ void eliminarTipoUsuario() {
         }
         controlPrincipal->getTiposAdmin()->remove();
         cout << "\n\n\tUsuario eliminado exitosamente!\n";
-        controlPrincipal->getTiposAdmin()->print();
+        controlPrincipal->getTiposAdmin()->print("Tipos de usuario");
     }
     _getch();
     system("cls");
@@ -181,16 +183,18 @@ void agregarArea() {
     int cantVentanillas;
 
     system("cls");
-    cout << "\n\t\t\Agrear Area" << endl;
-    cout << "\n\tDescripci�n: ";
-    cin >> descripcion;
+    cout << "\n\t\t\Agrear Área" << endl;
+    cout << "\n\tDescripción: ";
+    cin.ignore();
+    getline(cin, descripcion);
     cout << "\n\tCodigo: ";
     cin >> codigo; //verificar que en la lista de areas no haya una con codigo igual
     cout << "\n\tCantidad de Ventanillas: ";
     cin >> cantVentanillas; 
 
     controlPrincipal->agregarArea(descripcion, codigo, cantVentanillas);
-    cout << "\n\Area agregada exitosamente!";
+    cout << "\n\tÁrea agregada exitosamente!";
+    controlPrincipal->getAreas()->print("Áreas");
     _getch();
     system("cls");
 }
@@ -236,7 +240,7 @@ void modificarVentanillasArea() {
         Area& areaToManip = controlPrincipal->getAreas()->getElement();
         areaToManip.setCantVentanillas(cantVentanillas);
         cout << "\n\n\tArea editada exitosamente!\n";
-        controlPrincipal->getAreas()->print();
+        controlPrincipal->getAreas()->print("Áreas");
     }
     _getch();
     system("cls");
@@ -278,7 +282,7 @@ void eliminarArea() {
         }
         controlPrincipal->getAreas()->remove();
         cout << "\n\n\tUsuario eliminado exitosamente!\n";
-        controlPrincipal->getAreas()->print();
+        controlPrincipal->getAreas()->print("Áreas");
     }
     _getch();
     system("cls");
@@ -315,18 +319,19 @@ void agregarServicio() {
 
     system("cls");
     cout << "\n\t\t\tAgregar Servicio" << endl;
-    cout << "\n\tDescripci�n: ";
-    cin >> descripcion;
+    cout << "\n\tDescripción: ";
+    cin.ignore();
+    getline(cin,descripcion);
     cout << "\n\tPrioridad: ";
     cin >> prioridad; //verificar que en la lista de areas no haya una con codigo igual
     system("cls");
-    const char* titulo = "�rea para Agregar";
+    const char* titulo = "Área para Agregar";
     int n = controlPrincipal->getAreas()->getSize(); //obtiene el tamano de la lista de tipos de usuario
     system("cls");
 
     //Si no hay usuario por eliminar muestra un mensaje
     if (n == 0) {
-        cout << "\n\n\tNo hay �reas para generar servicios";
+        cout << "\n\n\tNo hay áreas para generar servicios";
     }
     else {
         const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
@@ -355,8 +360,8 @@ void agregarServicio() {
         Area& areaToManip = controlPrincipal->getAreas()->getElement();
         Area* areaToManipPtr = &areaToManip;
         controlPrincipal->agregarServicio(descripcion, areaToManipPtr, prioridad);
-        cout << "\n\Area agregada exitosamente!";
-        controlPrincipal->getServicios()->print();
+        cout << "\n\n\tServicio agregado exitosamente!";
+        controlPrincipal->getServicios()->print("Servicios");
     }
     _getch();
     system("cls");
@@ -398,7 +403,7 @@ void eliminarServicio() {
         }
         controlPrincipal->getServicios()->remove();
         cout << "\n\n\tServicio eliminado exitosamente!\n";
-        controlPrincipal->getServicios()->print();
+        controlPrincipal->getServicios()->print("Servicios");
     }
     _getch();
     system("cls");
@@ -445,7 +450,7 @@ void reordenarServicio() {
         int posServ = controlPrincipal->getServicios()->getPos();
         controlPrincipal->reordenarServicios(posServ, newPos);
         cout << "\n\n\tLista de servicios editada exitosamente!\n";
-        controlPrincipal->getServicios()->print();
+        controlPrincipal->getServicios()->print("Servicios");
     }
     _getch();
     system("cls");
