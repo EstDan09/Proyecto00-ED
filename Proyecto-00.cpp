@@ -509,7 +509,7 @@ void menuTiquetes() {
     int n = controlPrincipal->getTiposAdmin()->getSize(); //obtiene el tamano de la lista de tipos de usuario
     int priorityToGiveUsr;
     int pripriorityToGiveServ;
-    string areaCode;
+    Area* area;
     system("cls");
 
     //Si no hay usuario muestra un mensaje
@@ -576,11 +576,11 @@ void menuTiquetes() {
                 controlPrincipal->getServicios()->next();
             }
             pripriorityToGiveServ = controlPrincipal->getServicios()->getElement().getPrioridad();
-            areaCode = controlPrincipal->getServicios()->getElement().getArea()->getCodigo();
-            controlPrincipal->agregarTiquete(ticketCounter, areaCode, priorityToGiveUsr, pripriorityToGiveServ);
+            area = controlPrincipal->getServicios()->getElement().getArea();
+            controlPrincipal->agregarTiquete(ticketCounter, area, priorityToGiveUsr, pripriorityToGiveServ);
             ticketCounter++;
             cout << "\n\n\tTiquete creado exitosamente!\n";
-            controlPrincipal->getTiquetes()->print(); 
+            area->getTiquetes()->print(); 
             _getch();
         }
     }
@@ -649,10 +649,13 @@ void revisarColas() {
             }
 
             cout << "\n\n\tEstado de colas\n";
-            cout << "\n\n\t";
-
-            controlPrincipal->getTiquetesByArea("M")->print();//Imprimir los tiquetes por area *******
-            controlPrincipal->getTiquetes()->print();
+            if (controlPrincipal->getAreas()->getElement().getTiquetes() == nullptr) {
+                cout << "\n\n\tNo hay tiquetes en la cola de esta área\n";
+            }
+            else {
+                cout << "\n\n\t";
+                controlPrincipal->getAreas()->getElement().getTiquetes()->print();
+            }
 
             _getch();
 

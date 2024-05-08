@@ -29,6 +29,7 @@ public:
 		this->codigo = codigo;
 		this->cantVentanas = cantVentanas;
 		this->numVentana = 0;
+		this->tiquetes = new HeapPriorityQueue<Tiquete>();
 		ventanillas = new DLinkedList<Ventanilla>();
 		for (int i = 0; i < cantVentanas; i++) {
 			numVentana++;
@@ -45,6 +46,9 @@ public:
 	}
 	DLinkedList<Ventanilla>* getVentanillas() {
 		return ventanillas;
+	}
+	PriorityQueue<Tiquete>* getTiquetes() {
+		return tiquetes;
 	}
 	void setCantVentanillas(int cantVentanas) {
 		this->numVentana = 0;

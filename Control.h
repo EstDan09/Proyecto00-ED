@@ -13,7 +13,6 @@ using namespace std;
 class Control {
 private:
 	List<TipoUsuario>* tiposAdmin;
-	PriorityQueue<Tiquete>* tiquetes;
 	List<Servicio>* servicios;
 	List<Area>* areas;
 
@@ -22,11 +21,9 @@ public:
 		this->areas = new DLinkedList<Area>();
 		this->servicios = new DLinkedList<Servicio>();
 		this->tiposAdmin = new DLinkedList<TipoUsuario>();
-		this->tiquetes = new HeapPriorityQueue<Tiquete>();
 	}
 	~Control() {
 		delete tiposAdmin;
-		delete tiquetes;
 		delete servicios;
 		delete areas;
 	}
@@ -34,9 +31,6 @@ public:
 	//getters//
 	List<TipoUsuario>* getTiposAdmin() {
 		return tiposAdmin;
-	}
-	PriorityQueue<Tiquete>* getTiquetes() {
-		return tiquetes;
 	}
 	List<Area>* getAreas() {
 		return areas;
@@ -79,29 +73,10 @@ public:
 	}
 
 	//metodos Tiquetes//
-	void agregarTiquete(int numTiquete, string areaCode, int prioUser, int prioServ) {
-		Tiquete t = Tiquete(numTiquete, areaCode, prioUser, prioServ);
+	void agregarTiquete(int numTiquete, Area* area, int prioUser, int prioServ) {
+		Tiquete t = Tiquete(numTiquete, area->getCodigo(), prioUser, prioServ);
 		int prioridad = t.getPrioridadFinal();
-		tiquetes->insert(t, prioridad);
+		area->getTiquetes()->insert(t, prioridad);
 	}
-
-	PriorityQueue<Tiquete>* getTiquetesByArea(string areaCode) {
-		PriorityQueue<Tiquete>* tiquetesToReturn = new HeapPriorityQueue<Tiquete>();
-		PriorityQueue<Tiquete>* temp = tiquetes;
-
-		while (!temp->isEmpty()) {
-			Tiquete t = temp->removeMin(); // Remove the minimum element from temp
-			if (t.getCodigoArea() == areaCode) {
-				tiquetesToReturn->insert(t, t.getPrioridadFinal()); // Insert it into tiquetesToReturn only if it meets the condition
-			}
-		}
-
-		// Clean up temporary memory
-		delete temp;
-
-		return tiquetesToReturn;
-	}
-
-
 
 };

@@ -14,7 +14,6 @@ class Tiquete
 {
 private:
 	string codigo;
-	string codigoArea;
 	time_t fechaCreacion;
 	int prioridadFinal = 0;
 
@@ -24,7 +23,6 @@ public:
 	}
 	Tiquete(int ticketCounter, string codArea, int prioUser, int prioServ) {
 		string intStr = std::to_string(ticketCounter);
-		this->codigoArea = codArea;
 		this->codigo = codArea + intStr;
 		this->setPrioridadFinal(prioUser, prioServ);
 		this->fechaCreacion = time(0);
@@ -39,10 +37,6 @@ public:
 
 	string getCodigo() {
 		return this->codigo;
-	}
-
-	string getCodigoArea() {
-		return this->codigoArea;
 	}
 
 	string getFecha() const {
