@@ -92,7 +92,7 @@ public:
 	void agregarTiquete(int numTiquete, Area* area, int prioUser, int prioServ) {
 		Tiquete t = Tiquete(numTiquete, area->getCodigo(), prioUser, prioServ);
 		int prioridad = t.getPrioridadFinal();
-		area->getTiquetes()->insert(t, prioridad);
+		area->agregarTiquete(t, prioridad);
 	}
 
 };

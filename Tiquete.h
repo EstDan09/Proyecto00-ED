@@ -52,6 +52,11 @@ public:
 		return this->prioridadFinal;
 	}
 
+	time_t getFechaCreacion() {
+		return this->fechaCreacion;
+	}
+
+
 	friend ostream& operator<<(ostream& os, const Tiquete& tiquete) {
 		os << "Codigo: " << tiquete.codigo << ", Prioridad: " << tiquete.prioridadFinal << ", Fecha de Creación: " << tiquete.getFecha();
 		return os;

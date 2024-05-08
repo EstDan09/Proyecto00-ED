@@ -411,20 +411,19 @@ void eliminarServicio() {
 void reordenarServicio() {
     bool on = true;
     int opcion;
-    const char* titulo = "Modificar Cantidad de Ventanillas";
-    int n = controlPrincipal->getServicios()->getSize(); //obtiene el tamano de la lista de tipos de usuario
+    const char* titulo = "Reordenar Servicios";
+    int n = controlPrincipal->getServicios()->getSize(); //obtiene el tamano de la lista de servicios
     system("cls");
 
-    //Si no hay usuario por eliminar muestra un mensaje
+    //Si no hay servicios muesta un mensaje
     if (n == 0) {
-        cout << "\n\n\tNo hay �reas cuyas ventanillas puedes modificar :( que triste";
+        cout << "\n\n\tNo hay servicios para reordenar";
     }
     else {
         const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
-        int index = 0;
         controlPrincipal->getServicios()->goToStart();
 
-        //recorre la lista de tipos de usuarios existentes para crear las opciones de eliminar
+        //recorre la lista de tipos de servicios existentes para crear las opciones 
         for (int i = 0; i < controlPrincipal->getServicios()->getSize(); ++i) {
             Servicio& current = controlPrincipal->getServicios()->getElement();
             const string::size_type size = current.getDescripcion().size();
@@ -434,7 +433,7 @@ void reordenarServicio() {
             controlPrincipal->getServicios()->next();
         }
 
-        //crea el menu de eliminar tipos de usuario
+        //crea el menu de servicios
         opcion = menu(titulo, opciones, n);
 
         int newPos;
@@ -480,6 +479,38 @@ void menuGestorServicios() {
         }
     } while (on);
 }
+//Elimina los contenidos de todas las colas de prioridad, los tiquetes atendidos en ventanillas y
+//los datos de las estadísticas que se hayan registrado hasta el momento
+void modoOppenheimer() {    
+
+    //recorre la lista de areas
+    controlPrincipal->getAreas()->goToStart();
+    for (int i = 0; i < controlPrincipal->getAreas()->getSize(); ++i) {
+        Area& current = controlPrincipal->getAreas()->getElement();
+        current.reiniciarArea();
+        controlPrincipal->getAreas()->next();
+    }
+
+    //recorre la lista de usuarios
+    controlPrincipal->getTiposAdmin()->goToStart();
+    for (int i = 0; i < controlPrincipal->getTiposAdmin()->getSize(); ++i) {
+        TipoUsuario& current = controlPrincipal->getTiposAdmin()->getElement();
+        current.reiniciarUsuario();
+        controlPrincipal->getTiposAdmin()->next();
+    }
+
+    //recorre la lista de servicios
+    controlPrincipal->getServicios()->goToStart();
+    for (int i = 0; i < controlPrincipal->getServicios()->getSize(); ++i) {
+        Servicio& current = controlPrincipal->getServicios()->getElement();
+        current.reiniciarServicio();
+        controlPrincipal->getServicios()->next();
+    }
+
+    cout << "\n\n\tColas y estadisticas eliminadas correctamente.";
+    _getch();
+    
+}
 void menuAdmin() {
     bool on = true;
     int opcion;
@@ -500,6 +531,7 @@ void menuAdmin() {
             menuGestorServicios();
             break;
         case 4:
+            modoOppenheimer();
             break;
         case 5:
             on = false;
@@ -584,12 +616,16 @@ void menuTiquetes() {
             area = controlPrincipal->getServicios()->getElement().getArea();
             controlPrincipal->agregarTiquete(ticketCounter, area, priorityToGiveUsr, pripriorityToGiveServ);
             ticketCounter++;
+            controlPrincipal->getServicios()->getElement().agregarTiqueteSolicitado();
+            controlPrincipal->getTiposAdmin()->getElement().agregarTiqueteSolicitado();
             cout << "\n\n\tTiquete creado exitosamente!\n";
             area->getTiquetes()->print(); 
             _getch();
         }
     }
 }
+
+//revisa el estado actual de las colas por area
 void revisarColas() {
     bool on = true;
     int opcion;
@@ -667,6 +703,7 @@ void revisarColas() {
     }
 }
 
+//atiende un tiquete en una ventanilla por prioridad
 void atender() {
     bool on = true;
     int opcion;
@@ -743,16 +780,148 @@ void atender() {
                 cout << "\n\n\tNo hay tiquetes por atender en el área de la ventanilla\n";
             }
             else {
-                controlPrincipal->getAreas()->getElement().getVentanillas()->getElement().setCurrentTiquete(controlPrincipal->getAreas()->getElement().getTiquetes()->min());
-                cout << "\n\n\tEl tiquete " << controlPrincipal->getAreas()->getElement().getTiquetes()->min().getCodigo() << " será atendido en la ventanilla " << controlPrincipal->getAreas()->getElement().getVentanillas()->getElement().getNombre();
-                controlPrincipal->getAreas()->getElement().getTiquetes()->removeMin();
+                Area& area = controlPrincipal->getAreas()->getElement();
+                area.getVentanillas()->getElement().atenderTiquete(area.getTiquetes()->min());
+                cout << "\n\n\tEl tiquete " << area.getTiquetes()->min().getCodigo() << " será atendido en la ventanilla " << area.getVentanillas()->getElement().getNombre();
+                area.agregarTiempoEspera(difftime(time(0), area.getTiquetes()->min().getFechaCreacion())); //agrega el tiempo de espera total del tiquete
+                area.agregarTiquetesAtendidos(); //incrementa la cantidad de tiquetes atendidos en el area
+                area.getTiquetes()->removeMin(); //elimina el tiquete de la cola
             }
-
-            
             _getch();
 
         }
     }
+}
+
+//muestra la estadistica por area del total de tiquetes dispensados
+void tiquetesDispensadosPorArea() {
+    int n = controlPrincipal->getAreas()->getSize(); //obtiene el tamano de la lista de areas
+    system("cls");
+    cout << "\n\n\tCantidad de tiquetes dispensados por área\n";
+
+    //Si no hay areas muestra un mensaje
+    if (n == 0) {
+        cout << "\n\n\tNo hay áreas registradas en el sistema.";
+        _getch();
+    }
+    else {
+        const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
+
+        //recorre la lista de areas existentes para crear las opciones
+        controlPrincipal->getAreas()->goToStart();
+        for (int i = 0; i < controlPrincipal->getAreas()->getSize(); ++i) {
+            Area current = controlPrincipal->getAreas()->getElement();
+            cout << "\n\tÁrea: " << current.getDescripcion() << " Cant. tiquetes: " << current.getTiquetesDispensados();
+            controlPrincipal->getAreas()->next();
+        }
+        _getch();
+    }
+}
+
+//muestra la estadistica por servicio del total de tiquetes solicitados
+void tiquetesSolicitadosPorServicio() {
+    int n = controlPrincipal->getServicios()->getSize(); //obtiene el tamano de la lista de servicios
+    system("cls");
+    cout << "\n\n\tCantidad de tiquetes solicitados por servicio\n";
+
+    //Si no hay servicios muestra un mensaje
+    if (n == 0) {
+        cout << "\n\n\tNo hay servicios registrados en el sistema.";
+        _getch();
+    }
+    else {
+        const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
+
+        //recorre la lista de servicios existentes para crear las opciones
+        controlPrincipal->getServicios()->goToStart();
+        for (int i = 0; i < controlPrincipal->getServicios()->getSize(); ++i) {
+            Servicio current = controlPrincipal->getServicios()->getElement();
+            cout << "\n\tServicio: " << current.getDescripcion() << " Cant. tiquetes: " << current.getTiquetesSolicitados();
+            controlPrincipal->getServicios()->next();
+        }
+        _getch();
+    }
+}
+
+//muestra la estadistica por usuario del total de tiquetes emitidos
+void tiquetesEmitidosPorUsuario() {
+    int n = controlPrincipal->getTiposAdmin()->getSize(); //obtiene el tamano de la lista de usuarios
+    system("cls");
+    cout << "\n\n\tCantidad de tiquetes emitidos por usuario\n";
+
+    //Si no hay usuarios muestra un mensaje
+    if (n == 0) {
+        cout << "\n\n\tNo hay usuarios registrados en el sistema.";
+        _getch();
+    }
+    else {
+        const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
+
+        //recorre la lista de usuarios existentes para crear las opciones
+        controlPrincipal->getTiposAdmin()->goToStart();
+        for (int i = 0; i < controlPrincipal->getTiposAdmin()->getSize(); ++i) {
+            TipoUsuario current = controlPrincipal->getTiposAdmin()->getElement();            
+            cout << "\n\tTipo de usuario: " << current.getDescripcion() << " Cant. tiquetes: " << current.getTiquetesSolicitados();
+            controlPrincipal->getTiposAdmin()->next();
+        }
+        _getch();
+    }
+}
+
+//muestra la estadistica por area del promedio de tiempo de espera de los tiquetes atendidos
+void tiempoEsperaPorArea() {
+    int n = controlPrincipal->getAreas()->getSize(); //obtiene el tamano de la lista de areas
+    system("cls");
+    cout << "\n\n\tTiempo promedio de espera por área\n";
+
+    //Si no hay areas muestra un mensaje
+    if (n == 0) {
+        cout << "\n\n\tNo hay áreas registradas en el sistema.";
+        _getch();
+    }
+    else {
+        const char* opciones[100]; //Cambiar este valor fijo si fuera posible******** 
+
+        //recorre la lista de areas existentes para crear las opciones
+        controlPrincipal->getAreas()->goToStart();
+        for (int i = 0; i < controlPrincipal->getAreas()->getSize(); ++i) {
+            Area current = controlPrincipal->getAreas()->getElement();
+            cout << "\n\tÁrea: " << current.getDescripcion() << " Tiempo promedio de espera: " << current.getTiempoPromedioEspera() << " segundos";
+            controlPrincipal->getAreas()->next();
+        }
+        _getch();
+    }
+}
+
+//menu de estadisticas
+void estadisticas() {
+    bool on = true;
+    int opcion;
+    const char* titulo = "Estadísticas";
+    const char* opciones[] = { "Tiempo de espera por área", "Tiquetes dispensados por área", "Tiquetes solicitados por servicio", "Tiquetes emitidos por usuario", "Regresar" };
+    int n = 5;
+    do {
+        opcion = menu(titulo, opciones, n);
+
+        switch (opcion) {
+        case 1:
+            tiempoEsperaPorArea();
+            break;
+        case 2:
+            tiquetesDispensadosPorArea();
+            break;
+        case 3:
+            tiquetesSolicitadosPorServicio();
+            break;
+        case 4:
+            tiquetesEmitidosPorUsuario();
+            break;
+        case 5:
+            on = false;
+            break;
+        }
+
+    } while (on);
 }
 
 void menuPrincipal() {
@@ -779,6 +948,7 @@ void menuPrincipal() {
             menuAdmin();
             break;
         case 5:
+            estadisticas();
             break;
         case 6:
             on = false;

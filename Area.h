@@ -16,6 +16,9 @@ private:
 	int cantVentanas;
 	DLinkedList<Ventanilla>* ventanillas;
 	PriorityQueue<Tiquete>* tiquetes;
+	int tiquetesDispensados;
+	int tiquetesAtendidos;
+	double tiempoEspera;
 
 public:
 	Area() {
@@ -23,12 +26,16 @@ public:
 		this->codigo = "";
 		this->cantVentanas = 0;
 		this->numVentana = 0;
+		this->tiquetesDispensados = 0;
+		this->tiempoEspera = 0;
 	}
 	Area(string descripcion, string codigo, int cantVentanas) {
 		this->descripcion = descripcion;
 		this->codigo = codigo;
 		this->cantVentanas = cantVentanas;
 		this->numVentana = 0;
+		this->tiquetesDispensados = 0;
+		this->tiempoEspera = 0;
 		this->tiquetes = new HeapPriorityQueue<Tiquete>();
 		ventanillas = new DLinkedList<Ventanilla>();
 		for (int i = 0; i < cantVentanas; i++) {
@@ -61,8 +68,54 @@ public:
 		}
 		ventanillas->print("Ventanillas");
 	}
+
+	void agregarTiquete(Tiquete tiquete, int prioridad) {
+		this->tiquetes->insert(tiquete, prioridad);
+		tiquetesDispensados++;
+	}
+
+	//incremente el contador de tiquetes atendidos
+	void agregarTiquetesAtendidos() {
+		tiquetesAtendidos++;
+	}
+
+	//incrementa el contador de tiquetes dispensados
+	int getTiquetesDispensados() {
+		return tiquetesDispensados;
+	}
+
 	void setCodigo() {
 		this->codigo = "Z";
+	}
+
+	//realiza una sumatoria de todos los tiempos de espera de los tiquetes atendidos
+	void agregarTiempoEspera(double tiempo) {
+		this->tiempoEspera += tiempo;
+	}
+
+	//calcula el tiempo promedio de espera
+	double getTiempoPromedioEspera() {
+		if (this->tiempoEspera == 0.0) {
+			return 0;
+		}
+		return this->tiempoEspera / this-> tiquetesAtendidos;
+	}
+
+	//reiniciar valores
+	void reiniciarArea() {
+		this->tiempoEspera = 0;
+		this->tiquetesAtendidos = 0;
+		this->tiquetesDispensados = 0;
+		this->tiquetes = new HeapPriorityQueue<Tiquete>();
+
+		//reinicia las ventanillas del area
+		//recorre la lista de ventanillas
+		ventanillas->goToStart();
+		for (int i = 0; i < ventanillas->getSize(); ++i) {
+			Ventanilla& current = ventanillas->getElement();
+			current.reiniciarVentanilla();
+			ventanillas->next();
+		}
 	}
 	friend ostream& operator<<(ostream& os, const Area& area) {
 		os << "Descripción: " << area.descripcion << ", Codigo: " << area.codigo << ", Cant.Ventanillas: " << area.cantVentanas;

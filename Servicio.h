@@ -11,6 +11,7 @@ private:
 	string descripcion;
 	int prioridad;
 	Area* area;
+	int tiquetesSolicitados;
 
 public:
 	Servicio() {
@@ -20,6 +21,7 @@ public:
 		this->area = area;
 		this->descripcion = descripcion;
 		this->prioridad = prioridad;
+		this->tiquetesSolicitados = 0;
 	}
 	~Servicio() {
 
@@ -32,6 +34,16 @@ public:
 	}
 	string getDescripcion() {
 		return this->descripcion;
+	}
+	void agregarTiqueteSolicitado() {
+		tiquetesSolicitados++;
+	}
+	int getTiquetesSolicitados() {
+		return tiquetesSolicitados;
+	}
+	//reiniciar valores
+	void reiniciarServicio() {
+		this->tiquetesSolicitados = 0;
 	}
 	friend ostream& operator<<(ostream& os, const Servicio& servicio) {
 		os << "Descripción: " << servicio.descripcion << ", Prioridad: " << servicio.prioridad <<", Código de área: " << servicio.area->getCodigo();
